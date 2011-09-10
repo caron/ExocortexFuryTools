@@ -1,20 +1,18 @@
 
 app = Application
-prj = app.ActiveProject
 
-#proplist = prj.Properties
-#playctrl = proplist("Play Control")
+def exportFramespec(numberOfFrames, outputPath):
 
-#app.LogMessage( "PlayControl's Name: " + playctrl.Name );
-#app.LogMessage( "PlayControl's FullName: " + playctrl.FullName );
+	Application.SetValue("PlayControl.Current", 0, "")
 
-for i in range(10):
-	Application.SetValue("PlayControl.Current", i, "")
+	for i in range(numberOfFrames):
+		Application.SetValue("PlayControl.Current", i, "")
+		
+		f = open(outputPath + str(i) + ".frs", "w")
+		
+		furyOptions = app.ActiveProject.ActiveScene.PassContainer.Properties.Filter("", "", "Exocortex Fury 2 Options")
+
+		for param in furyOptions(0).Parameters:
+			f.write(str(param.Name) + "=" + str(param.Value) + "\n")
 	
-	f = open("C:/framespec" + str(i) + ".frs", "w")
-	
-	furyOptions = app.ActiveProject.ActiveScene.PassContainer.Properties.Filter( "", "", "Exocortex Fury 2 Options" )
-
-	for param in furyOptions(0).Parameters:
-		f.write(str(param.Name) + "=" + str(param.Value) + "\n")
-	
+exportFramespec(10, "C:/framespec")
